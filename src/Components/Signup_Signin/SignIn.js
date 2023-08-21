@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { LoginContext } from "../context/ContextProvider";
 import { Base_URL } from "../../Constants/data";
+import axios from "axios";
 
 const SignIn = () => {
   const [logData, setLogData] = useState({
@@ -32,27 +33,25 @@ const SignIn = () => {
     e.preventDefault();
 
     const { email, password } = logData;
+    try {
+      const res = await axios.post(
+        `${Base_URL}/login`,
+        {
+          email,
+          password,
+        },
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "http://localhost:3000",
+            "Content-Type": "application/json",
+          },
+          withCredentials: true, // Cookie credentials (tokens)
+        }
+      );
+      console.log(res);
+      const { data } = res;
+      console.log("data ", data);
 
-    const res = await fetch(`${Base_URL}/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    });
-
-    const data = await res.json();
-    console.log("data", data);
-
-    if (res.status === 400 || !data) {
-      toast.warning("Invalid Details", {
-        position: "top-center",
-      });
-    } else {
       setAccount(data);
       setLogData({
         ...logData,
@@ -62,9 +61,52 @@ const SignIn = () => {
       toast.success("Logged In successfully", {
         position: "top-center",
       });
-      // window.location.reload();
       navigate("/");
+    } catch (error) {
+      if (error.response.status === 400) {
+        toast.warning("Invalid Details", {
+          position: "top-center",
+        });
+        setLogData({
+          ...logData,
+          email: "",
+          password: "",
+        });
+      }
+      console.log(error);
     }
+
+    // const res = await fetch(`http://localhost:8005/login`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+
+    //   body: JSON.stringify({
+    //     email,
+    //     password,
+    //   }),
+    // });
+
+    // const data = await res.json();
+    // console.log("data", data);
+
+    // if (res.status === 400 || !data) {
+    //   toast.warning("Invalid Details", {
+    //     position: "top-center",
+    //   });
+    // } else {
+    //   setAccount(data);
+    //   setLogData({
+    //     ...logData,
+    //     email: "",
+    //     password: "",
+    //   });
+    //   toast.success("Logged In successfully", {
+    //     position: "top-center",
+    //   });
+    //   navigate("/");
+    // }
   };
 
   return (
