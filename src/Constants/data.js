@@ -162,4 +162,5 @@ export const products = [
   },
 ];
 
-export const Base_URL = "http://localhost:8005";
+// export const Base_URL = "http://localhost:8005";
+export const Base_URL = "https://amazon-clone-backend-s66p.onrender.com";
