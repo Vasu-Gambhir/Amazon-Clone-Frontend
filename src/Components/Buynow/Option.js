@@ -6,7 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { Base_URL } from "../../Constants/data";
 
 const Option = ({ deleteData, getdatabuy }) => {
-  const { account, setAccount } = useContext(LoginContext);
+  const { setAccount } = useContext(LoginContext);
 
   const removeData = async (req, res) => {
     const result = await fetch(`${Base_URL}/remove/${deleteData}`, {

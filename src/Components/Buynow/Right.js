@@ -4,14 +4,10 @@ const Right = ({ cartData }) => {
   const [price, setPrice] = useState(0);
 
   useEffect(() => {
-    totalAmount();
-  }, [cartData]);
-
-  const totalAmount = () => {
     let sum = 0;
     cartData.map((data) => (sum += data.price.mrp));
     setPrice(sum);
-  };
+  }, [cartData]);
 
   return (
     <div className="right_buy">
